@@ -1,3 +1,4 @@
 *.DS_Store
 data.zip
 data/tmp/
+data/output.csv
