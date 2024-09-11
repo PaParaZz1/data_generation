@@ -4,8 +4,9 @@ import csv
 
 def main():
     base_dir = '.'
-    csv_file = 'output.csv'
+    csv_file = 'output_0911_n3.csv'
     columns = ['编号', '标签', '题目概述', '输入', '输出（deepseekv2_5）', '输出（gpt_4o_20240513ptu）', '输出（qwen2_72b_instruct）']
+    #columns = ['编号', '标签', '题目概述', '输入', '输出（deepseekv2_5）', '输出（gpt_4o_20240513ptu）', '输出（qwen2_72b_instruct）', '指令（instruct）输入']
 
     with open(csv_file, 'w', newline='', encoding='utf-8') as f:
         writer = csv.DictWriter(f, fieldnames=columns)
@@ -20,12 +21,10 @@ def main():
             continue
 
         number, label, summary = folder.split('_')
-        if int(number) > 3:
-            continue
 
-        #base_file = os.path.join(folder_path, 'base.txt')
-        #with open(base_file, 'r', encoding='utf-8') as f:
-            #base = f.read().strip()
+        base_file = os.path.join(folder_path, 'base.txt')
+        with open(base_file, 'r', encoding='utf-8') as f:
+            instruct = f.read().strip()
 
         completion_path = os.path.join(folder_path, 'completion')
         input_file = os.path.join(completion_path, 'input.txt')
@@ -52,7 +51,8 @@ def main():
             '输入': input_text,
             '输出（deepseekv2_5）': deepseek_output,
             '输出（gpt_4o_20240513ptu）': gpt_output,
-            '输出（qwen2_72b_instruct）': qwen_output
+            '输出（qwen2_72b_instruct）': qwen_output,
+            #'指令（instruct）输入': instruct,
         }
 
         with open(csv_file, 'a', newline='', encoding='utf-8') as f:
